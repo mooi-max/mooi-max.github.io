@@ -13,7 +13,8 @@ const config: QuartzConfig = {
     enableSPA: true,
     enablePopovers: true,
     analytics: {
-      provider: "plausible",
+      provider: "google",
+      tagId: "G-0CRVHX0SJS",
     },
     locale: "en-US",
     baseUrl: "mooi-max.github.io",
