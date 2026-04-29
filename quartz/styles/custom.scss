@@ -197,3 +197,67 @@ pre code ::selection {
     font-size: 0.84em;
   }
 }
+
+/*======================================================================*/
+
+
+/* ==============================
+   Mooi Blog - Simple Background
+   暗色：科技赛博朋克
+   亮色：明亮暖白
+   ============================== */
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-position: center top;
+}
+
+/* 暗色模式：深蓝黑 + 蓝紫科技光晕 */
+:root[saved-theme="dark"] body {
+  background:
+    radial-gradient(circle at 15% 10%, rgba(34, 211, 238, 0.18), transparent 28rem),
+    radial-gradient(circle at 85% 12%, rgba(168, 85, 247, 0.2), transparent 30rem),
+    radial-gradient(circle at 50% 105%, rgba(59, 130, 246, 0.12), transparent 32rem),
+    linear-gradient(135deg, #050816 0%, #08111f 45%, #111827 100%);
+}
+
+/* 亮色模式：明亮暖白，不带蓝色光感 */
+:root[saved-theme="light"] body {
+  background:
+    radial-gradient(circle at 16% 10%, rgba(255, 255, 255, 0.95), transparent 28rem),
+    radial-gradient(circle at 86% 12%, rgba(255, 247, 237, 0.55), transparent 30rem),
+    radial-gradient(circle at 50% 105%, rgba(250, 250, 250, 0.92), transparent 32rem),
+    linear-gradient(135deg, #ffffff 0%, #fafafa 50%, #f6f6f4 100%);
+}
+
+/* 暗色模式：正文区域轻微玻璃卡片感 */
+:root[saved-theme="dark"] article {
+  background: rgba(8, 13, 28, 0.56);
+  border-radius: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.22);
+}
+
+/* 亮色模式：正文区域干净白色卡片感 */
+:root[saved-theme="light"] article {
+  background: rgba(255, 255, 255, 0.78);
+  border-radius: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.06);
+}
+
+/* 暗色模式：标题轻微科技光效 */
+:root[saved-theme="dark"] article h1 {
+  text-shadow: 0 0 22px rgba(34, 211, 238, 0.12);
+}
+
+/* 亮色模式：标题保持清爽 */
+:root[saved-theme="light"] article h1 {
+  text-shadow: none;
+}
