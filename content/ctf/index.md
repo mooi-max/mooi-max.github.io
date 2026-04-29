@@ -4,11 +4,6 @@ description: 记录 CTF、靶机和 Web 安全相关学习内容
 tags:
   - CTF
 ---
+## 测试更新
 
-# CTF 笔记
-
-这里整理 CTF、靶机、Web 安全相关内容。
-
-## 文章列表
-
-- [[Nmap常用命令]]
+这是一次 Obsidian Git 同步测试。
