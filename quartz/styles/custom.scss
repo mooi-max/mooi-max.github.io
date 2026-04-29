@@ -1,3 +1,199 @@
 @use "./base.scss";
 
 // put your custom CSS here!
+
+/* ==============================
+   Mooi Blog - Final Code Block Style
+   简洁、稳定、适合技术笔记
+   ============================== */
+
+/* 行内代码，例如 `git push` */
+:not(pre) > code {
+  padding: 0.18rem 0.42rem;
+  margin: 0 0.08rem;
+  border-radius: 6px;
+  font-size: 0.88em;
+  font-family:
+    "JetBrains Mono",
+    "Cascadia Code",
+    "Fira Code",
+    "Consolas",
+    "Menlo",
+    monospace;
+  background: color-mix(in srgb, var(--secondary) 12%, transparent);
+  color: var(--secondary);
+  border: 1px solid color-mix(in srgb, var(--secondary) 18%, transparent);
+  white-space: break-spaces;
+}
+
+/* 去掉之前的三色圆点和伪元素 */
+pre::before,
+pre::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* 代码块主体 */
+pre {
+  position: relative !important;
+  margin: 1.35rem 0;
+  padding: 1.15rem 3.4rem 1.15rem 1.15rem !important;
+  min-height: 3.2rem;
+  border-radius: 14px;
+  overflow-x: auto;
+  overflow-y: visible !important;
+  font-size: 0.92rem;
+  line-height: 1.7;
+  font-family:
+    "JetBrains Mono",
+    "Cascadia Code",
+    "Fira Code",
+    "Consolas",
+    "Menlo",
+    monospace;
+  background: #1f2933 !important;
+  color: #e5e7eb;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+/* 代码内容 */
+pre code {
+  display: block;
+  padding: 0 !important;
+  margin: 0 !important;
+  font-size: inherit;
+  line-height: inherit;
+  font-family: inherit;
+  background: transparent !important;
+  color: inherit;
+  border: none !important;
+  white-space: pre;
+  tab-size: 2;
+}
+
+/* Quartz / Shiki 高亮 span 继承字体 */
+pre span {
+  font-family: inherit;
+}
+
+/* 行号区域优化 */
+pre .line {
+  min-height: 1.7em;
+}
+
+/* 复制按钮：强制显示在右上角 */
+pre button,
+pre .clipboard-button,
+pre .copy-button,
+.clipboard-button,
+.copy-button {
+  position: absolute !important;
+  top: 0.62rem !important;
+  right: 0.72rem !important;
+  z-index: 20 !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: 2.15rem !important;
+  height: 2.15rem !important;
+  min-width: 2.15rem !important;
+  min-height: 2.15rem !important;
+
+  padding: 0 !important;
+  border-radius: 10px !important;
+
+  opacity: 0.85 !important;
+  visibility: visible !important;
+
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
+
+  transform: none !important;
+  transition:
+    opacity 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+/* 复制按钮 hover */
+pre button:hover,
+pre .clipboard-button:hover,
+pre .copy-button:hover,
+.clipboard-button:hover,
+.copy-button:hover {
+  opacity: 1 !important;
+  background: rgba(255, 255, 255, 0.18) !important;
+  border-color: rgba(255, 255, 255, 0.28) !important;
+}
+
+/* 复制按钮里的图标 */
+pre button svg,
+pre .clipboard-button svg,
+pre .copy-button svg,
+.clipboard-button svg,
+.copy-button svg {
+  width: 1.05rem !important;
+  height: 1.05rem !important;
+  color: #e5e7eb !important;
+  opacity: 0.95 !important;
+}
+
+/* 横向滚动条 */
+pre::-webkit-scrollbar {
+  height: 8px;
+}
+
+pre::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 999px;
+}
+
+pre::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.48);
+  border-radius: 999px;
+}
+
+pre::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.78);
+}
+
+/* 选中文字颜色 */
+pre ::selection,
+pre code ::selection {
+  background: rgba(96, 165, 250, 0.36);
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  pre {
+    margin: 1rem 0;
+    padding: 1rem 3rem 1rem 1rem !important;
+    min-height: 3rem;
+    border-radius: 12px;
+    font-size: 0.84rem;
+    line-height: 1.65;
+  }
+
+  pre button,
+  pre .clipboard-button,
+  pre .copy-button,
+  .clipboard-button,
+  .copy-button {
+    top: 0.52rem !important;
+    right: 0.58rem !important;
+    width: 1.95rem !important;
+    height: 1.95rem !important;
+    min-width: 1.95rem !important;
+    min-height: 1.95rem !important;
+  }
+
+  :not(pre) > code {
+    font-size: 0.84em;
+  }
+}
