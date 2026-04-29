@@ -16,7 +16,7 @@ const config: QuartzConfig = {
       provider: "google",
       tagId: "G-0CRVHX0SJS",
     },
-    locale: "en-US",
+    locale: "zh-CN",
     baseUrl: "mooi-max.github.io",
     ignorePatterns: ["private", "templates", ".obsidian"],
     defaultDateType: "modified",
