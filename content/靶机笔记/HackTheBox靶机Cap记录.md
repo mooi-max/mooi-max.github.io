@@ -1,4 +1,11 @@
-
+---
+title: HackTheBox靶机Cap记录
+description:
+date: 2026-05-09
+tags:
+  - 打靶机
+  - 渗透测试
+---
 
 # 一.介绍
 
