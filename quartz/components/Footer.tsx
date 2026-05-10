@@ -34,7 +34,7 @@ export default (() => {
             aria-label="QQ"
           >
             <span class="mooi-social-iconbox">
-              <img class="mooi-social-img mooi-qq-img" src="/icons/qq.svg" alt="QQ" />
+              <img class="mooi-social-img mooi-qq-img" src="/static/icons/qq.svg" alt="QQ" />
             </span>
             <span class="mooi-social-name">QQ</span>
           </a>
@@ -50,7 +50,7 @@ export default (() => {
               <span class="mooi-icon-light-bg mooi-github-bg">
                 <img
                   class="mooi-social-img mooi-github-img"
-                  src="/icons/github.svg"
+                  src="/static/icons/github.svg"
                   alt="GitHub"
                 />
               </span>
@@ -67,7 +67,7 @@ export default (() => {
           >
             <span class="mooi-social-iconbox">
               <span class="mooi-icon-light-bg mooi-csdn-bg">
-                <img class="mooi-social-img mooi-csdn-img" src="/icons/csdn.svg" alt="CSDN" />
+                <img class="mooi-social-img mooi-csdn-img" src="/static/icons/csdn.svg" alt="CSDN" />
               </span>
             </span>
             <span class="mooi-social-name">CSDN</span>
