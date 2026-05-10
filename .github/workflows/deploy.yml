@@ -32,6 +32,11 @@ jobs:
       - name: Build Quartz
         run: npx quartz build
 
+      - name: Add Vercount verification file
+        run: |
+          mkdir -p public/.well-known
+          printf '%s' 'vercount-domain-verify=mooi-max.github.io,bkinauyfu4brobrn1oc4bu6m' > public/.well-known/vercount-verify-bkinauyfu4brobrn1oc4bu6m.txt
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

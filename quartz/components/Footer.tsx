@@ -28,7 +28,7 @@ export default (() => {
         <div class="mooi-footer-socials">
           <a
             class="mooi-social-card"
-            href="你的QQ链接"
+            href="tencent://message/?uin=3877526681&Site=mooi&Menu=yes"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="QQ"
@@ -74,7 +74,7 @@ export default (() => {
 
           <a
             class="mooi-social-card"
-            href="你的CSDN链接"
+            href="https://blog.csdn.net/2401_89382898"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="CSDN"
