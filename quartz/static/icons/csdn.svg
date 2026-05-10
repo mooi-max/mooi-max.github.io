@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 256" role="img" aria-label="CSDN">
+  <rect width="512" height="256" rx="42" fill="#ffffff"/>
+  <g transform="translate(42 44) skewX(-4)">
+    <text x="0" y="128" font-size="168" font-weight="500" font-family="Arial, Helvetica, sans-serif" fill="#f04a37">c</text>
+    <text x="115" y="128" font-size="168" font-weight="500" font-family="Arial, Helvetica, sans-serif" fill="#000000" letter-spacing="-6">sdn</text>
+  </g>
+</svg>
