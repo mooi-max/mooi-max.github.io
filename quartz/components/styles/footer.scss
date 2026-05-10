@@ -1,19 +1,19 @@
 footer.mooi-footer {
-  margin-top: 3rem;
-  padding: 1.5rem 0 2.2rem;
+  margin-top: 3.2rem;
+  padding: 1.7rem 0 2.4rem;
   text-align: center;
   color: var(--gray);
 
   &::before {
     content: "";
     display: block;
-    width: 100%;
+    width: min(720px, 100%);
     height: 1px;
-    margin-bottom: 1.3rem;
+    margin: 0 auto 1.35rem;
     background: linear-gradient(
       90deg,
       transparent,
-      color-mix(in srgb, var(--gray) 28%, transparent),
+      color-mix(in srgb, var(--gray) 24%, transparent),
       transparent
     );
   }
@@ -22,80 +22,243 @@ footer.mooi-footer {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 0.7rem;
-    margin-bottom: 1.35rem;
-    font-size: 0.9rem;
-    color: var(--gray);
+    gap: 0.9rem;
+    margin-bottom: 1.55rem;
+    font-size: 0.95rem;
+    color: color-mix(in srgb, var(--gray) 88%, transparent);
+    letter-spacing: 0.03em;
     flex-wrap: wrap;
   }
 
+  .mooi-count-number {
+    color: color-mix(in srgb, var(--gray) 96%, white 4%);
+    font-weight: 600;
+  }
+
   .mooi-footer-separator {
-    opacity: 0.5;
+    opacity: 0.42;
   }
 
   .mooi-footer-socials {
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    gap: 2rem;
+    gap: clamp(1.6rem, 4vw, 3rem);
     flex-wrap: wrap;
   }
 
   .mooi-social-card {
+    position: relative;
+    width: 96px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.65rem;
+    gap: 0.72rem;
     text-decoration: none;
-    transition: transform 0.22s ease;
+    isolation: isolate;
+    transition:
+      transform 0.24s ease,
+      filter 0.24s ease;
   }
 
-  .mooi-social-card:hover {
-    transform: translateY(-3px);
+  .mooi-social-card::before {
+    content: "";
+    position: absolute;
+    top: 8px;
+    width: 76px;
+    height: 76px;
+    border-radius: 24px;
+    background: radial-gradient(circle, rgba(168, 85, 247, 0.32), transparent 68%);
+    filter: blur(14px);
+    opacity: 0;
+    z-index: -1;
+    transition:
+      opacity 0.24s ease,
+      transform 0.24s ease;
   }
 
   .mooi-social-iconbox {
-    width: 58px;
-    height: 58px;
+    width: 78px;
+    height: 78px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 16px;
-    background: rgba(20, 28, 52, 0.88);
+    border-radius: 24px;
+    background:
+      radial-gradient(circle at 50% 25%, rgba(99, 102, 241, 0.16), transparent 54%),
+      linear-gradient(180deg, rgba(22, 30, 58, 0.96), rgba(15, 22, 43, 0.96));
+    border: 1px solid rgba(125, 211, 252, 0.08);
     box-shadow:
-      0 0 0 1px rgba(80, 140, 255, 0.08),
-      0 0 18px rgba(0, 255, 200, 0.08),
-      inset 0 0 20px rgba(0, 255, 200, 0.05);
+      0 12px 28px rgba(0, 0, 0, 0.22),
+      0 0 0 1px rgba(125, 211, 252, 0.035),
+      inset 0 0 24px rgba(125, 211, 252, 0.04);
     transition:
-      box-shadow 0.22s ease,
-      transform 0.22s ease,
-      background 0.22s ease;
+      transform 0.24s ease,
+      border-color 0.24s ease,
+      box-shadow 0.24s ease,
+      background 0.24s ease;
+  }
+
+  .mooi-social-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .mooi-social-card:hover::before {
+    opacity: 1;
+    transform: scale(1.12);
   }
 
   .mooi-social-card:hover .mooi-social-iconbox {
-    background: rgba(22, 32, 60, 0.96);
+    border-color: rgba(168, 85, 247, 0.72);
+    background:
+      radial-gradient(circle at 50% 28%, rgba(168, 85, 247, 0.34), transparent 58%),
+      linear-gradient(180deg, rgba(27, 32, 70, 0.98), rgba(18, 22, 50, 0.98));
     box-shadow:
-      0 0 0 1px rgba(80, 140, 255, 0.14),
-      0 0 22px rgba(0, 255, 200, 0.16),
-      inset 0 0 24px rgba(0, 255, 200, 0.08);
-    transform: scale(1.03);
+      0 0 0 1px rgba(168, 85, 247, 0.34),
+      0 0 22px rgba(168, 85, 247, 0.48),
+      0 0 54px rgba(124, 58, 237, 0.32),
+      0 14px 34px rgba(0, 0, 0, 0.25),
+      inset 0 0 26px rgba(168, 85, 247, 0.12);
+    transform: scale(1.035);
   }
 
-  .mooi-social-icon {
-    width: 26px;
-    height: 26px;
+  .mooi-social-svg {
     display: block;
+    transition:
+      transform 0.24s ease,
+      filter 0.24s ease;
+  }
+
+  .mooi-social-card:hover .mooi-social-svg {
+    transform: scale(1.08);
+    filter: drop-shadow(0 0 9px rgba(196, 181, 253, 0.62));
+  }
+
+  .mooi-qq-svg {
+    width: 45px;
+    height: 45px;
+  }
+
+  .mooi-github-circle {
+    width: 46px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.22),
+      0 0 16px rgba(255, 255, 255, 0.08);
+    transition:
+      transform 0.24s ease,
+      box-shadow 0.24s ease,
+      background 0.24s ease;
+  }
+
+  .mooi-social-card:hover .mooi-github-circle {
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow:
+      0 0 0 1px rgba(196, 181, 253, 0.45),
+      0 0 18px rgba(168, 85, 247, 0.45);
+    transform: scale(1.05);
+  }
+
+  .mooi-github-svg {
+    width: 31px;
+    height: 31px;
+    color: #050505;
+  }
+
+  .mooi-csdn-logo {
+    font-size: 1.58rem;
+    font-weight: 900;
+    font-style: italic;
+    line-height: 1;
+    letter-spacing: 0.01em;
+    color: #9fffe6;
+    text-shadow:
+      0 0 10px rgba(159, 255, 230, 0.22),
+      0 0 18px rgba(34, 211, 238, 0.08);
+    transition:
+      transform 0.24s ease,
+      color 0.24s ease,
+      text-shadow 0.24s ease;
+  }
+
+  .mooi-social-card:hover .mooi-csdn-logo {
+    transform: scale(1.08);
+    color: #e9d5ff;
+    text-shadow:
+      0 0 10px rgba(168, 85, 247, 0.8),
+      0 0 24px rgba(168, 85, 247, 0.52),
+      0 0 12px rgba(159, 255, 230, 0.22);
   }
 
   .mooi-social-name {
-    font-size: 0.95rem;
-    color: #35f0d2;
-    letter-spacing: 0.02em;
-    transition: color 0.22s ease, text-shadow 0.22s ease;
+    font-size: 1.04rem;
+    font-weight: 800;
+    color: #7dfbe0;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    transition:
+      color 0.24s ease,
+      text-shadow 0.24s ease,
+      transform 0.24s ease;
   }
 
   .mooi-social-card:hover .mooi-social-name {
-    color: #61ffe6;
-    text-shadow: 0 0 10px rgba(97, 255, 230, 0.35);
+    color: #c4b5fd;
+    text-shadow:
+      0 0 10px rgba(168, 85, 247, 0.72),
+      0 0 20px rgba(168, 85, 247, 0.36);
+    transform: translateY(1px);
+  }
+
+  @media (max-width: 520px) {
+    padding-bottom: 2rem;
+
+    .mooi-footer-count {
+      gap: 0.65rem;
+      font-size: 0.88rem;
+      margin-bottom: 1.35rem;
+    }
+
+    .mooi-footer-socials {
+      gap: 1.2rem;
+    }
+
+    .mooi-social-card {
+      width: 82px;
+    }
+
+    .mooi-social-iconbox {
+      width: 68px;
+      height: 68px;
+      border-radius: 21px;
+    }
+
+    .mooi-qq-svg {
+      width: 40px;
+      height: 40px;
+    }
+
+    .mooi-github-circle {
+      width: 41px;
+      height: 41px;
+    }
+
+    .mooi-github-svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .mooi-csdn-logo {
+      font-size: 1.38rem;
+    }
+
+    .mooi-social-name {
+      font-size: 0.95rem;
+    }
   }
 }
