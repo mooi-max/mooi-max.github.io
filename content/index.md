@@ -1,10 +1,7 @@
 ---
 title: Welcome to Mooi's Blog.
 ---
----
-title: 首页
-description: Mooi 的个人技术笔记，记录 打靶机、CTF、Linux、工具教程和学习过程。
----
+
 
 # Mooi 的个人技术笔记
 
