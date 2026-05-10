@@ -1,15 +1,101 @@
-footer {
-  text-align: left;
-  margin-bottom: 4rem;
-  opacity: 0.7;
+footer.mooi-footer {
+  margin-top: 3rem;
+  padding: 1.5rem 0 2.2rem;
+  text-align: center;
+  color: var(--gray);
 
-  & ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+  &::before {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 1px;
+    margin-bottom: 1.3rem;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in srgb, var(--gray) 28%, transparent),
+      transparent
+    );
+  }
+
+  .mooi-footer-count {
     display: flex;
-    flex-direction: row;
-    gap: 1rem;
-    margin-top: -1rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 1.35rem;
+    font-size: 0.9rem;
+    color: var(--gray);
+    flex-wrap: wrap;
+  }
+
+  .mooi-footer-separator {
+    opacity: 0.5;
+  }
+
+  .mooi-footer-socials {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .mooi-social-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.65rem;
+    text-decoration: none;
+    transition: transform 0.22s ease;
+  }
+
+  .mooi-social-card:hover {
+    transform: translateY(-3px);
+  }
+
+  .mooi-social-iconbox {
+    width: 58px;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    background: rgba(20, 28, 52, 0.88);
+    box-shadow:
+      0 0 0 1px rgba(80, 140, 255, 0.08),
+      0 0 18px rgba(0, 255, 200, 0.08),
+      inset 0 0 20px rgba(0, 255, 200, 0.05);
+    transition:
+      box-shadow 0.22s ease,
+      transform 0.22s ease,
+      background 0.22s ease;
+  }
+
+  .mooi-social-card:hover .mooi-social-iconbox {
+    background: rgba(22, 32, 60, 0.96);
+    box-shadow:
+      0 0 0 1px rgba(80, 140, 255, 0.14),
+      0 0 22px rgba(0, 255, 200, 0.16),
+      inset 0 0 24px rgba(0, 255, 200, 0.08);
+    transform: scale(1.03);
+  }
+
+  .mooi-social-icon {
+    width: 26px;
+    height: 26px;
+    display: block;
+  }
+
+  .mooi-social-name {
+    font-size: 0.95rem;
+    color: #35f0d2;
+    letter-spacing: 0.02em;
+    transition: color 0.22s ease, text-shadow 0.22s ease;
+  }
+
+  .mooi-social-card:hover .mooi-social-name {
+    color: #61ffe6;
+    text-shadow: 0 0 10px rgba(97, 255, 230, 0.35);
   }
 }
