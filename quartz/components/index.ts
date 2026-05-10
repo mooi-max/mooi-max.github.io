@@ -51,3 +51,5 @@ export {
   Flex,
   ConditionalRender,
 }
+
+export { default as MooiLoader } from "./MooiLoader"

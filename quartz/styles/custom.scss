@@ -270,207 +270,54 @@ code {
 }
 
 
-/* =========================
-   暗色模式：赛博朋克风
-   ========================= */
+/* ==============================
+   Mooi 暗色模式：深石墨灰背景
+   ============================== */
 
-html[saved-theme="dark"] {
-  body {
-    position: relative;
-    background:
-      radial-gradient(circle at 18% 16%, rgba(255, 0, 255, 0.18), transparent 28%),
-      radial-gradient(circle at 82% 18%, rgba(0, 255, 255, 0.14), transparent 30%),
-      radial-gradient(circle at 50% 90%, rgba(0, 255, 159, 0.10), transparent 35%),
-      linear-gradient(135deg, #080b1f 0%, #0a0e27 48%, #050711 100%);
-    color: var(--darkgray);
-  }
+[saved-theme="dark"] {
+  --light: #15171c !important;
+  --lightgray: #1e222a !important;
+  --gray: #9ca3af !important;
+  --darkgray: #e5e7eb !important;
+  --dark: #f3f4f6 !important;
 
-  /* 扫描线 */
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    background: repeating-linear-gradient(
-      0deg,
-      rgba(0, 255, 159, 0.04) 0px,
-      transparent 1px,
-      transparent 3px,
-      rgba(0, 255, 159, 0.04) 4px
-    );
-  }
+  --secondary: #7dfbe0 !important;
+  --tertiary: #a78bfa !important;
+  --highlight: rgba(125, 251, 224, 0.12) !important;
+}
 
-  /* 科技网格 */
-  body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    background-image:
-      linear-gradient(rgba(0, 255, 159, 0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 255, 159, 0.04) 1px, transparent 1px);
-    background-size: 42px 42px;
-    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.85), transparent 88%);
-  }
+[saved-theme="dark"] body {
+  background: #15171c !important;
+  color: var(--dark) !important;
+}
 
-  /* 正文卡片 */
-  .page article {
-    background: rgba(8, 11, 31, 0.74);
-    border: 1px solid rgba(0, 255, 159, 0.24);
-    box-shadow:
-      0 0 18px rgba(0, 255, 159, 0.10),
-      inset 0 0 18px rgba(0, 255, 159, 0.035);
-    backdrop-filter: blur(14px);
-    border-radius: 18px;
-    padding: 1.9rem 2.1rem !important;
-  }
+[saved-theme="dark"] .page,
+[saved-theme="dark"] .center,
+[saved-theme="dark"] article,
+[saved-theme="dark"] .popover,
+[saved-theme="dark"] .explorer,
+[saved-theme="dark"] .sidebar {
+  background-color: transparent;
+}
 
-  /* 左右侧栏本身不要有大框 */
-  .left.sidebar,
-  .right.sidebar {
-    gap: 1rem;
-  }
+[saved-theme="dark"] .popover,
+[saved-theme="dark"] .backlinks,
+[saved-theme="dark"] .graph,
+[saved-theme="dark"] .toc,
+[saved-theme="dark"] .explorer {
+  color: var(--dark);
+}
 
-  /* 只给具体组件加卡片，不给整个侧栏加卡片 */
-  .explorer,
-  .toc,
-  .graph,
-  .backlinks,
-  .recent-notes {
-    background: rgba(8, 11, 31, 0.74);
-    border: 1px solid rgba(0, 255, 159, 0.24);
-    box-shadow:
-      0 0 16px rgba(0, 255, 159, 0.10),
-      inset 0 0 16px rgba(0, 255, 159, 0.03);
-    backdrop-filter: blur(14px);
-    border-radius: 18px;
-    padding: 1rem 1.1rem !important;
-  }
+/* 文章内容区域稍微提亮一点，避免整站一片黑 */
+[saved-theme="dark"] article {
+  background: rgba(30, 34, 42, 0.42);
+  border-radius: 18px;
+}
 
-  /* 搜索框单独优化 */
-  .search {
-    background: rgba(8, 11, 31, 0.72) !important;
-    border: 1px solid rgba(0, 255, 159, 0.28) !important;
-    box-shadow: 0 0 14px rgba(0, 255, 159, 0.10);
-    border-radius: 14px !important;
-    padding: 0.75rem 0.9rem !important;
-  }
-
-  .search input {
-    border-radius: 12px;
-  }
-
-  /* 右侧目录、图谱标题不要贴边 */
-  .graph h3,
-  .toc h3,
-  .explorer h3,
-  .recent-notes h3,
-  .backlinks h3 {
-    margin-top: 0;
-    margin-bottom: 0.8rem;
-    padding-bottom: 0.45rem;
-    border-bottom: 1px solid rgba(0, 255, 159, 0.18);
-  }
-
-  /* 目录和探索列表不要太贴边 */
-  .toc ul,
-  .explorer ul {
-    padding-left: 1rem;
-    margin-top: 0.45rem;
-  }
-
-  .toc li,
-  .explorer li {
-    line-height: 1.75;
-  }
-
-  /* 标题霓虹感 */
-  h1,
-  h2,
-  h3,
-  .article-title,
-  .page-title {
-    color: #f5ffff;
-    text-shadow:
-      0 0 8px rgba(0, 255, 255, 0.45),
-      0 0 16px rgba(255, 0, 255, 0.22);
-  }
-
-  /* 左上角站点标题 */
-  .page-title a {
-    color: #00ff9f;
-    text-shadow:
-      0 0 8px rgba(0, 255, 159, 0.45),
-      0 0 16px rgba(0, 255, 255, 0.20);
-  }
-
-  /* 链接 */
-  a,
-  a.internal {
-    color: #00ff9f;
-    text-shadow: 0 0 8px rgba(0, 255, 159, 0.35);
-  }
-
-  a:hover,
-  a.internal:hover {
-    color: #ff00ff;
-    text-shadow:
-      0 0 8px rgba(255, 0, 255, 0.55),
-      0 0 16px rgba(0, 255, 255, 0.35);
-  }
-
-  /* 正文里的标签、链接块 */
-  .tag-link,
-  .internal.tag-link {
-    background: rgba(0, 255, 159, 0.10);
-    border: 1px solid rgba(0, 255, 159, 0.22);
-    border-radius: 8px;
-    padding: 0.12rem 0.35rem;
-  }
-
-  /* 行内代码 */
-  code {
-    background: rgba(0, 255, 159, 0.10);
-    border: 1px solid rgba(0, 255, 159, 0.22);
-  }
-
-  /* 代码块 */
-  pre {
-    background: rgba(5, 7, 17, 0.90) !important;
-    border: 1px solid rgba(0, 255, 159, 0.30);
-    box-shadow: 0 0 18px rgba(0, 255, 159, 0.12);
-  }
-
-  /* 引用块 */
-  blockquote {
-    border-left: 3px solid #ff00ff;
-    background: rgba(255, 0, 255, 0.07);
-  }
-
-  /* 分割线 */
-  hr {
-    border-color: rgba(0, 255, 159, 0.25);
-  }
-
-  /* 滚动条 */
-  ::-webkit-scrollbar {
-    width: 10px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: #080b1f;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: rgba(0, 255, 159, 0.42);
-    border-radius: 10px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 0, 255, 0.58);
-  }
+/* 代码块更深一点，和正文区分开 */
+[saved-theme="dark"] pre {
+  background: #111827 !important;
+  border: 1px solid rgba(148, 163, 184, 0.18);
 }
 
 
