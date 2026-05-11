@@ -3,7 +3,7 @@ title: MazeSec靶机Phantom记录
 description:
 date: 2026-03-22
 tags:
-  - 靶机笔记
+  - 笔记
   - 渗透测试
 ---
 # Phantom_mooi

@@ -53,3 +53,4 @@ export {
 }
 
 export { default as MooiLoader } from "./MooiLoader"
+export { default as HomeRecentPosts } from "./HomeRecentPosts"

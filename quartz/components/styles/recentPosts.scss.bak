@@ -1,0 +1,80 @@
+body[data-slug="index"] .content-meta {
+  display: none;
+}
+
+body[data-slug="index"] article.popover-hint {
+  display: none;
+}
+
+.mooi-recent-posts {
+  margin-top: 1.8rem;
+}
+
+.mooi-post-row {
+  display: grid;
+  grid-template-columns: 12.5rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1.8rem;
+  padding: 0.9rem 0;
+}
+
+.mooi-post-date {
+  color: var(--gray);
+  font-size: 1rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.mooi-post-title {
+  color: var(--secondary);
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.4;
+  text-decoration: none;
+}
+
+.mooi-post-title:hover {
+  color: var(--tertiary);
+}
+
+.mooi-post-tags {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.mooi-post-tag {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.25rem 0.65rem;
+  color: var(--secondary);
+  background: color-mix(in srgb, var(--secondary) 14%, transparent);
+  font-size: 0.95rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+@media all and (max-width: 800px) {
+  .mooi-post-row {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+    padding: 1rem 0;
+  }
+
+  .mooi-post-title {
+    grid-row: 1;
+    font-size: 1.1rem;
+  }
+
+  .mooi-post-date {
+    grid-row: 2;
+    font-size: 0.9rem;
+  }
+
+  .mooi-post-tags {
+    grid-row: 3;
+    justify-content: flex-start;
+  }
+}

@@ -7,7 +7,6 @@ tags:
   - Obsidian
   - GitHub
   - Quartz
-  - GitHub Pages
   - 教程
 ---
 
