@@ -19,7 +19,7 @@ htb的靶机没法直接访问IP，要连VPN进入htb的内网才能访问
 
 下载地址：[https://openvpn.net/client/](https://openvpn.net/client/)
 
-​![image](assets/image-20260509164145-1tqsc3x.png)​
+​![image](image-20260509164145-1tqsc3x.png)​
 
 个人觉得htb靶机的Guided Mode（引导模式）挺好的，实在没思路的时候可以用这个模式
 
