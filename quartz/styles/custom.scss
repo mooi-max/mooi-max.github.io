@@ -534,3 +534,31 @@ html[saved-theme="light"] {
     font-size: 1.45rem;
   }
 }
+
+/* 目录首页文章列表：标签强制一行显示 */
+body[data-slug$="/index"] .section {
+  grid-template-columns: 9rem minmax(0, 1fr) max-content;
+  column-gap: 1.2rem;
+  align-items: center;
+}
+
+body[data-slug$="/index"] .section > .tags {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+body[data-slug$="/index"] .section > .tags > li {
+  margin: 0;
+  white-space: nowrap;
+}
+
+body[data-slug$="/index"] .section > .tags .tag-link {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
