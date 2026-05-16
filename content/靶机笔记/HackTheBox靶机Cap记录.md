@@ -129,3 +129,5 @@ getpcaps <PID>     # 查看指定 PID 进程拥有的 capabilities
 再筛 cap_setuid / cap_sys_admin / cap_dac_*
 再看看当前 shell / 某个进程有没有 capability
 ```
+
+
